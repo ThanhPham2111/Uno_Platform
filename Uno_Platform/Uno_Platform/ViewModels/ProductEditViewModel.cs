@@ -55,20 +55,27 @@ public partial class ProductEditViewModel : ObservableObject
         IsLoading = true;
         try
         {
+            System.Diagnostics.Debug.WriteLine($"LoadProductAsync: Loading product with Id: {product.Id}");
             Product = await _productService.GetProductByIdAsync(product.Id);
             if (Product != null)
             {
+                System.Diagnostics.Debug.WriteLine($"LoadProductAsync: Product loaded - Name: {Product.Name}, Id: {Product.Id}");
                 IsEditMode = true;
                 Name = Product.Name;
                 Price = Product.Price;
                 Description = Product.Description;
                 Category = Product.Category;
             }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("LoadProductAsync: Product is null after GetProductByIdAsync");
+            }
             await LoadCategories();
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error loading product: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
         }
         finally
         {
@@ -132,12 +139,14 @@ public partial class ProductEditViewModel : ObservableObject
             Product.Image = "Assets/img/caby.png"; // Always use default image
 
             bool success;
-            if (IsEditMode)
+            if (IsEditMode && Product.Id > 0)
             {
+                // Update existing product
                 success = await _productService.UpdateProductAsync(Product);
             }
             else
             {
+                // Add new product
                 success = await _productService.AddProductAsync(Product);
             }
 

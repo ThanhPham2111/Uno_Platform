@@ -52,17 +52,31 @@ public sealed partial class ProductCard : UserControl
 
     private void ViewDetails_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        if (ViewDetailsCommand != null && ViewDetailsCommand.CanExecute(Product))
+        if (ViewDetailsCommand != null && Product != null)
         {
-            ViewDetailsCommand.Execute(Product);
+            try
+            {
+                ViewDetailsCommand.Execute(Product);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error executing ViewDetailsCommand: {ex.Message}");
+            }
         }
     }
 
     private void AddToCart_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        if (AddToCartCommand != null && AddToCartCommand.CanExecute(Product))
+        if (AddToCartCommand != null && Product != null)
         {
-            AddToCartCommand.Execute(Product);
+            try
+            {
+                AddToCartCommand.Execute(Product);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error executing AddToCartCommand: {ex.Message}");
+            }
         }
     }
 
@@ -85,9 +99,16 @@ public sealed partial class ProductCard : UserControl
         tapAnimation?.Begin();
 
         // Navigate to product detail page
-        if (ViewDetailsCommand != null && ViewDetailsCommand.CanExecute(Product))
+        if (ViewDetailsCommand != null && Product != null)
         {
-            ViewDetailsCommand.Execute(Product);
+            try
+            {
+                ViewDetailsCommand.Execute(Product);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error executing ViewDetailsCommand from Card_Tapped: {ex.Message}");
+            }
         }
     }
 }

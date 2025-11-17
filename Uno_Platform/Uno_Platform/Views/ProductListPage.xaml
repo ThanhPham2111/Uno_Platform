@@ -5,7 +5,7 @@
       xmlns:components="using:Uno_Platform.Components"
       xmlns:models="using:Uno_Platform.Models"
       xmlns:converters="using:Uno_Platform.Converters"
-      Background="{StaticResource BackgroundGradientBrush}">
+      Background="#F5F5F5">
   
   <Page.Resources>
     <!-- Page Enter Animation -->
@@ -14,31 +14,7 @@
                       Storyboard.TargetProperty="Opacity"
                       From="0"
                       To="1"
-                      Duration="0:0:0.5">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-    </Storyboard>
-
-    <!-- Card Stagger Animation Template -->
-    <Storyboard x:Name="CardEnterAnimation" x:Key="CardEnterAnimation">
-      <DoubleAnimation Storyboard.TargetProperty="Opacity"
-                      From="0"
-                      To="1"
-                      Duration="0:0:0.4">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-      <DoubleAnimation Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                      From="30"
-                      To="0"
-                      Duration="0:0:0.4">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
+                      Duration="0:0:0.3"/>
     </Storyboard>
   </Page.Resources>
 
@@ -48,182 +24,130 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <!-- Search and Filter Section with Modern Design -->
+    <!-- Filter Section - Đơn giản -->
     <Border Grid.Row="0"
-            Background="{StaticResource AcrylicBrush}"
-            Padding="{StaticResource SpacingL}"
+            Background="White"
+            Padding="20"
             BorderThickness="0,0,0,1"
-            BorderBrush="{StaticResource BorderBrush}">
-      <StackPanel Spacing="{StaticResource SpacingM}">
-
-        <!-- Search TextBox with Icon -->
-        <Border Background="{StaticResource SurfaceBrush}"
-                Padding="16"
-                CornerRadius="{StaticResource BorderRadiusLarge}"
-                BorderThickness="2"
-                BorderBrush="{StaticResource BorderBrush}">
-          <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+            BorderBrush="#E0E0E0">
+      <StackPanel Spacing="15">
+        
+        <!-- Search Bar -->
+        <Border Background="#F5F5F5"
+                Padding="12"
+                CornerRadius="8"
+                BorderThickness="1"
+                BorderBrush="#DDD">
+          <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
             <SymbolIcon Grid.Column="0"
                        Symbol="Find"
-                       Foreground="{StaticResource PrimaryBrush}"
+                       Foreground="#6366F1"
+                       Width="20"
+                       Height="20"
                        VerticalAlignment="Center"/>
             <TextBox Grid.Column="1"
                     Text="{x:Bind ViewModel.SearchKeyword, Mode=TwoWay}"
-                    PlaceholderText="Search products by name, category..."
+                    PlaceholderText="Tìm kiếm sản phẩm..."
                     BorderThickness="0"
                     Background="Transparent"
-                    FontSize="{StaticResource FontSizeBody}"
-                    Foreground="{StaticResource TextPrimaryBrush}"/>
+                    FontSize="16"
+                    Foreground="#333"/>
           </Grid>
         </Border>
 
-        <!-- Price Filter Slider -->
-        <Border Background="{StaticResource SurfaceBrush}"
-                Padding="{StaticResource SpacingM}"
-                CornerRadius="{StaticResource BorderRadiusLarge}"
-                BorderThickness="2"
-                BorderBrush="{StaticResource BorderBrush}">
-          <StackPanel Spacing="{StaticResource SpacingM}">
-            <TextBlock Text="Price Range"
-                       Style="{StaticResource Heading3Style}"
-                       Foreground="{StaticResource TextPrimaryBrush}"/>
-            <Grid ColumnDefinitions="*,Auto,*" ColumnSpacing="16">
-              <Border Grid.Column="0"
-                     Background="{StaticResource PrimaryBrush}"
-                     CornerRadius="{StaticResource BorderRadiusSmall}"
-                     Padding="12,8"
-                     HorizontalAlignment="Left">
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                  <TextBlock Text="$"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            VerticalAlignment="Center"/>
-                  <TextBlock Text="{x:Bind ViewModel.CurrentMinPriceFormatted, Mode=OneWay}"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            FontSize="{StaticResource FontSizeBody}"/>
-                </StackPanel>
-              </Border>
-              
-              <TextBlock Grid.Column="1"
-                        Text="—"
-                        FontSize="20"
-                        Foreground="{StaticResource TextSecondaryBrush}"
-                        VerticalAlignment="Center"/>
-              
-              <Border Grid.Column="2"
-                     Background="{StaticResource PrimaryBrush}"
-                     CornerRadius="{StaticResource BorderRadiusSmall}"
-                     Padding="12,8"
-                     HorizontalAlignment="Right">
-                <StackPanel Orientation="Horizontal" Spacing="4">
-                  <TextBlock Text="$"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            VerticalAlignment="Center"/>
-                  <TextBlock Text="{x:Bind ViewModel.CurrentMaxPriceFormatted, Mode=OneWay}"
-                            Foreground="White"
-                            FontWeight="Bold"
-                            FontSize="{StaticResource FontSizeBody}"/>
-                </StackPanel>
-              </Border>
-            </Grid>
-            
-            <Slider Minimum="{x:Bind ViewModel.MinPrice, Mode=OneWay}"
-                   Maximum="{x:Bind ViewModel.MaxPrice, Mode=OneWay}"
-                   Value="{x:Bind ViewModel.CurrentMinPrice, Mode=TwoWay}"
-                   TickFrequency="100"
-                   TickPlacement="None"
-                   Foreground="{StaticResource PrimaryBrush}"/>
-            <Slider Minimum="{x:Bind ViewModel.MinPrice, Mode=OneWay}"
-                   Maximum="{x:Bind ViewModel.MaxPrice, Mode=OneWay}"
-                   Value="{x:Bind ViewModel.CurrentMaxPrice, Mode=TwoWay}"
-                   TickFrequency="100"
-                   TickPlacement="None"
-                   Foreground="{StaticResource PrimaryBrush}"/>
-          </StackPanel>
-        </Border>
-
-        <!-- Category Filter Pills -->
-        <Border Background="{StaticResource SurfaceBrush}"
-                Padding="{StaticResource SpacingM}"
-                CornerRadius="{StaticResource BorderRadiusLarge}"
-                BorderThickness="2"
-                BorderBrush="{StaticResource BorderBrush}">
-          <StackPanel Spacing="{StaticResource SpacingS}">
-            <TextBlock Text="Categories"
-                       Style="{StaticResource Heading3Style}"
-                       Foreground="{StaticResource TextPrimaryBrush}"/>
-            <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                         VerticalScrollBarVisibility="Disabled"
-                         HorizontalScrollMode="Auto">
-            <ItemsControl ItemsSource="{x:Bind ViewModel.Categories, Mode=OneWay}">
+        <!-- Categories -->
+        <StackPanel Spacing="10">
+          <TextBlock Text="Danh mục"
+                     FontSize="16"
+                     FontWeight="Bold"
+                     Foreground="#333"/>
+          <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                       VerticalScrollBarVisibility="Disabled"
+                       HorizontalScrollMode="Auto">
+            <ItemsControl x:Name="CategoriesItemsControl" ItemsSource="{x:Bind ViewModel.CategoriesWithCount, Mode=OneWay}">
               <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                  <StackPanel Orientation="Horizontal" Spacing="8"/>
+                  <StackPanel Orientation="Horizontal" Spacing="10"/>
                 </ItemsPanelTemplate>
               </ItemsControl.ItemsPanel>
               <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="x:String">
-                  <Button Content="{x:Bind}"
-                         Click="CategoryButton_Click"
-                         Tag="{x:Bind}"
-                           Padding="20,10"
-                           CornerRadius="20"
-                           MinWidth="80"
-                           FontSize="{StaticResource FontSizeSmall}"
-                           FontWeight="SemiBold"
-                           Background="{StaticResource AcrylicBrush}"
-                           BorderThickness="2"
-                           BorderBrush="{StaticResource PrimaryBrush}"
-                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                <DataTemplate x:DataType="models:CategoryWithCount">
+                  <Button Click="CategoryButton_Click"
+                         Tag="{x:Bind Name}"
+                         Padding="16,10"
+                         CornerRadius="20"
+                         MinWidth="100"
+                         FontSize="14"
+                         FontWeight="SemiBold"
+                         x:Name="CategoryBtn">
+                    <Button.Style>
+                      <Style TargetType="Button">
+                        <Setter Property="Background" Value="#E0E0E0"/>
+                        <Setter Property="BorderThickness" Value="2"/>
+                        <Setter Property="BorderBrush" Value="#6366F1"/>
+                        <Setter Property="Foreground" Value="#333"/>
+                      </Style>
+                    </Button.Style>
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                      <TextBlock Text="{x:Bind Name, Mode=OneWay}" VerticalAlignment="Center"/>
+                      <Border Background="#EC4899"
+                             CornerRadius="10"
+                             Padding="6,3"
+                             MinWidth="30">
+                        <TextBlock Text="{x:Bind Count, Mode=OneWay}"
+                                 Foreground="White"
+                                 FontSize="12"
+                                 FontWeight="Bold"
+                                 HorizontalAlignment="Center"/>
+                      </Border>
+                    </StackPanel>
+                  </Button>
                 </DataTemplate>
               </ItemsControl.ItemTemplate>
             </ItemsControl>
-            </ScrollViewer>
-          </StackPanel>
-        </Border>
+          </ScrollViewer>
+        </StackPanel>
 
         <!-- Results Count -->
-        <TextBlock Style="{StaticResource SecondaryTextStyle}"
-                   Margin="0,4,0,0">
+        <TextBlock FontSize="14"
+                   FontWeight="SemiBold"
+                   Foreground="#666">
           <Run Text="{x:Bind ViewModel.FilteredProducts.Count, Mode=OneWay}"/>
-          <Run Text=" products found"/>
+          <Run Text=" sản phẩm"/>
         </TextBlock>
 
       </StackPanel>
     </Border>
 
-    <!-- Products Grid -->
+    <!-- Products Display - Grid layout đơn giản -->
     <ScrollViewer Grid.Row="1" 
-                  Padding="{StaticResource SpacingL}"
-                  ZoomMode="Disabled"
+                  Padding="20"
                   VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Disabled">
       <Grid>
-        <!-- Products Grid with Beautiful Card Layout -->
+        <!-- Products Grid - Hiển thị dạng grid với nhiều cột -->
         <ItemsControl ItemsSource="{x:Bind ViewModel.FilteredProducts, Mode=OneWay}"
                       x:Name="ProductsItemsControl">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-              <ItemsWrapGrid Orientation="Horizontal" 
-                            MaximumRowsOrColumns="0"
-                            HorizontalAlignment="Stretch"
-                            ItemWidth="340"
-                            ItemHeight="480"/>
+              <StackPanel Orientation="Vertical" Spacing="20"/>
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="models:Product">
-              <Border Margin="0,0,16,24"
-                     Opacity="0"
-                     RenderTransformOrigin="0.5,0.5">
-                <Border.RenderTransform>
-                  <TranslateTransform Y="30"/>
-                </Border.RenderTransform>
-              <components:ProductCard Product="{x:Bind}"
+              <Border Width="300"
+                     Height="420"
+                     Margin="0,0,0,20"
+                     Background="White"
+                     CornerRadius="12"
+                     BorderThickness="1"
+                     BorderBrush="#E0E0E0"
+                     Padding="0"
+                     HorizontalAlignment="Left"
+                     VerticalAlignment="Top">
+                <components:ProductCard Product="{x:Bind}"
                                      ViewDetailsCommand="{Binding ViewModel.NavigateToProductDetailCommand, ElementName=PageRoot}"
-                                       AddToCartCommand="{Binding ViewModel.AddToCartCommand, ElementName=PageRoot}"/>
+                                     AddToCartCommand="{Binding ViewModel.AddToCartCommand, ElementName=PageRoot}"/>
               </Border>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
@@ -231,32 +155,23 @@
 
         <!-- Empty State -->
         <Border x:Name="EmptyStateBorder"
-                Background="{StaticResource AcrylicBrush}"
-                Padding="{StaticResource SpacingXXL}"
+                Background="White"
+                Padding="40"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center"
-                CornerRadius="{StaticResource BorderRadiusLarge}"
-                BorderThickness="2"
-                BorderBrush="{StaticResource BorderBrush}"
+                CornerRadius="12"
+                BorderThickness="1"
+                BorderBrush="#E0E0E0"
                 Visibility="{x:Bind ViewModel.FilteredProducts.Count, Converter={StaticResource CountToVisibilityConverter}, ConverterParameter=Inverse}">
-          <StackPanel Spacing="{StaticResource SpacingL}" HorizontalAlignment="Center">
+          <StackPanel Spacing="15" HorizontalAlignment="Center">
             <TextBlock Text="🔍"
-                       FontSize="96"
+                       FontSize="60"
                        HorizontalAlignment="Center"
-                       Opacity="0.6"/>
-            <TextBlock Text="No products found"
-                       Style="{StaticResource Heading2Style}"
-                       HorizontalAlignment="Center"/>
-            <TextBlock Text="Try adjusting your search or filters to find what you're looking for"
-                       Style="{StaticResource SecondaryTextStyle}"
-                       HorizontalAlignment="Center"
-                       TextAlignment="Center"
-                       TextWrapping="Wrap"
-                       MaxWidth="400"/>
-            <Button Content="Clear Filters"
-                   Style="{StaticResource PrimaryButtonStyle}"
-                   Margin="0,16,0,0"
-                   Command="{x:Bind ViewModel.RefreshCommand}"
+                       Opacity="0.5"/>
+            <TextBlock Text="Không tìm thấy sản phẩm"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Foreground="#333"
                        HorizontalAlignment="Center"/>
           </StackPanel>
         </Border>
@@ -266,6 +181,6 @@
     <!-- Loading Overlay -->
     <components:LoadingIndicator Grid.Row="1"
                                 IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
-                              Message="Loading products..."/>
+                                Message="Đang tải sản phẩm..."/>
   </Grid>
 </Page>

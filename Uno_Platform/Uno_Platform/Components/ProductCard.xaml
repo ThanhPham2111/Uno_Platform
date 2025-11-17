@@ -126,8 +126,8 @@
       
     <Grid>
       <Grid.RowDefinitions>
-          <RowDefinition Height="240"/>
-        <RowDefinition Height="*"/>
+          <RowDefinition Height="200"/>
+        <RowDefinition Height="220"/>
       </Grid.RowDefinitions>
 
         <!-- Product Image Section with Gradient Background -->
@@ -165,73 +165,105 @@
         <Border Grid.Row="1"
                Background="{StaticResource SurfaceBrush}"
                CornerRadius="0,0,16,16"
-               Padding="{StaticResource SpacingL}">
-          <StackPanel Spacing="{StaticResource SpacingS}">
+               Padding="16">
+          <Grid RowDefinitions="Auto,Auto,*">
             
         <!-- Product Name -->
-        <TextBlock Text="{x:Bind Product.Name, Mode=OneWay}"
-                   Style="{StaticResource Heading3Style}"
+        <TextBlock Grid.Row="0"
+                   Text="{x:Bind Product.Name, Mode=OneWay}"
                    TextWrapping="Wrap"
                    MaxLines="2"
                    TextTrimming="CharacterEllipsis"
-                      FontSize="20"
-                      FontWeight="Bold"
-                      LineHeight="28"
-                      Foreground="{StaticResource TextPrimaryBrush}"/>
+                   FontSize="18"
+                   FontWeight="Bold"
+                   LineHeight="24"
+                   Foreground="{StaticResource TextPrimaryBrush}"
+                   Margin="0,0,0,8"/>
 
         <!-- Price -->
-        <StackPanel Orientation="Horizontal" 
-                       Spacing="8"
-                       Margin="0,8,0,0">
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal" 
+                    Spacing="8"
+                    Margin="0,0,0,12">
               <Border Background="{StaticResource AccentBrush}"
                      CornerRadius="8"
-                     Padding="10,6"
+                     Padding="8,5"
                      HorizontalAlignment="Left">
-                <StackPanel Orientation="Horizontal" Spacing="6">
-          <TextBlock Text="💰"
-                    FontSize="18"
-                    VerticalAlignment="Center"/>
-          <TextBlock Text="{x:Bind Product.Price, Mode=OneWay, Converter={StaticResource PriceFormatConverter}}"
-                           Foreground="White"
-                           FontSize="22"
-                    FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                  <TextBlock Text="💰"
+                            FontSize="16"
+                            VerticalAlignment="Center"/>
+                  <TextBlock Text="{x:Bind Product.Price, Mode=OneWay, Converter={StaticResource PriceFormatConverter}}"
+                             Foreground="White"
+                             FontSize="18"
+                             FontWeight="Bold"/>
                 </StackPanel>
               </Border>
         </StackPanel>
 
         <!-- Action Buttons -->
-        <Grid ColumnDefinitions="*,*" 
-                 ColumnSpacing="{StaticResource SpacingS}" 
-                 Margin="0,16,0,0">
+        <Grid Grid.Row="2"
+              ColumnDefinitions="*,*" 
+              ColumnSpacing="8" 
+              VerticalAlignment="Bottom"
+              Margin="0,0,0,0">
               
               <!-- View Details Button -->
           <Button Grid.Column="0"
-                     Content="View Details"
-                  Style="{StaticResource SecondaryButtonStyle}"
-                     FontSize="{StaticResource FontSizeSmall}"
-                     Padding="16,12"
-                     CornerRadius="{StaticResource BorderRadiusMedium}"
-                  Background="{StaticResource AcrylicBrush}"
-                  BorderBrush="{StaticResource PrimaryBrush}"
+                     Content="Details"
+                  FontSize="13"
+                     Padding="12,10"
+                     CornerRadius="8"
+                  Background="#FFFFFF"
+                  BorderBrush="#6366F1"
                      BorderThickness="2"
-                  FontWeight="SemiBold"
-                     Foreground="{StaticResource PrimaryBrush}"
+                  FontWeight="Bold"
+                     Foreground="#6366F1"
                   Command="{x:Bind ViewDetailsCommand}"
-                  CommandParameter="{x:Bind Product, Mode=OneWay}"/>
+                  CommandParameter="{x:Bind Product, Mode=OneWay}">
+            <Button.Template>
+              <ControlTemplate TargetType="Button">
+                <Border x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+                  <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </ControlTemplate>
+            </Button.Template>
+          </Button>
               
               <!-- Add to Cart Button -->
           <Button Grid.Column="1"
-                     Content="Add to Cart"
-                  Style="{StaticResource PrimaryButtonStyle}"
-                     FontSize="{StaticResource FontSizeSmall}"
-                     Padding="16,12"
-                     CornerRadius="{StaticResource BorderRadiusMedium}"
-                  FontWeight="SemiBold"
+                     Content="Add Cart"
+                  FontSize="13"
+                     Padding="12,10"
+                     CornerRadius="8"
+                  Background="#6366F1"
+                  BorderBrush="#6366F1"
+                  BorderThickness="2"
+                  Foreground="White"
+                  FontWeight="Bold"
                   Command="{x:Bind AddToCartCommand}"
-                  CommandParameter="{x:Bind Product, Mode=OneWay}"/>
+                  CommandParameter="{x:Bind Product, Mode=OneWay}">
+            <Button.Template>
+              <ControlTemplate TargetType="Button">
+                <Border x:Name="RootBorder"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}">
+                  <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+              </ControlTemplate>
+            </Button.Template>
+          </Button>
         </Grid>
 
-      </StackPanel>
+          </Grid>
         </Border>
     </Grid>
   </Border>

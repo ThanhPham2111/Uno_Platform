@@ -26,7 +26,17 @@ public class InMemoryDbContext
         var index = _products.FindIndex(p => p.Id == product.Id);
         if (index >= 0)
         {
-            _products[index] = product;
+            // Create a new instance to avoid reference issues
+            _products[index] = new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Description = product.Description,
+                Category = product.Category,
+                Image = "Assets/img/caby.png",
+                CreatedAt = _products[index].CreatedAt // Preserve original creation date
+            };
         }
     }
 

@@ -54,6 +54,9 @@ public partial class ProductListViewModel : ObservableObject
     private List<string> categories = new();
 
     [ObservableProperty]
+    private List<CategoryWithCount> categoriesWithCount = new();
+
+    [ObservableProperty]
     private int cartItemCount;
 
     public ProductListViewModel()
@@ -72,12 +75,27 @@ public partial class ProductListViewModel : ObservableObject
             Categories = await _productService.GetAllCategoriesAsync();
             Categories.Insert(0, "All");
             
+            // Calculate product counts for each category
+            CategoriesWithCount = Categories.Select(category =>
+            {
+                int count = category == "All" 
+                    ? Products.Count 
+                    : Products.Count(p => p.Category == category);
+                return new CategoryWithCount { Name = category, Count = count };
+            }).ToList();
+            
             if (Products.Any())
             {
                 MinPrice = Products.Min(p => p.Price);
                 MaxPrice = Products.Max(p => p.Price);
+                
+                // Set initial price range to show all products
                 CurrentMinPrice = MinPrice;
                 CurrentMaxPrice = MaxPrice;
+                
+                // Notify property changes
+                OnPropertyChanged(nameof(CurrentMinPriceFormatted));
+                OnPropertyChanged(nameof(CurrentMaxPriceFormatted));
             }
             
             ApplyFilters();
@@ -132,14 +150,32 @@ public partial class ProductListViewModel : ObservableObject
     partial void OnSelectedCategoryChanged(string value)
     {
         ApplyFilters();
+        // Update category counts after filtering
+        UpdateCategoryCounts();
+    }
+
+    private void UpdateCategoryCounts()
+    {
+        CategoriesWithCount = Categories.Select(category =>
+        {
+            int count = category == "All" 
+                ? Products.Count 
+                : Products.Count(p => p.Category == category);
+            return new CategoryWithCount { Name = category, Count = count };
+        }).ToList();
     }
 
     private void ApplyFilters()
     {
-        IsLoading = true;
         try
         {
             var filtered = Products.AsEnumerable();
+
+            // Category filter
+            if (SelectedCategory != "All")
+            {
+                filtered = filtered.Where(p => p.Category == SelectedCategory);
+            }
 
             // Search filter
             if (!string.IsNullOrWhiteSpace(SearchKeyword))
@@ -148,22 +184,14 @@ public partial class ProductListViewModel : ObservableObject
                 filtered = filtered.Where(p =>
                     p.Name.ToLowerInvariant().Contains(keyword) ||
                     p.Category.ToLowerInvariant().Contains(keyword) ||
-                    p.Description.ToLowerInvariant().Contains(keyword)
+                    (p.Description != null && p.Description.ToLowerInvariant().Contains(keyword))
                 );
             }
 
-            // Category filter
-            if (SelectedCategory != "All")
-            {
-                filtered = filtered.Where(p => p.Category == SelectedCategory);
-            }
-
-            // Price filter
-            filtered = filtered.Where(p => p.Price >= CurrentMinPrice && p.Price <= CurrentMaxPrice);
-
             // Update ObservableCollection efficiently
             FilteredProducts.Clear();
-            foreach (var product in filtered)
+            var filteredList = filtered.ToList();
+            foreach (var product in filteredList)
             {
                 FilteredProducts.Add(product);
             }
@@ -171,41 +199,64 @@ public partial class ProductListViewModel : ObservableObject
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"Error applying filters: {ex.Message}");
-        }
-        finally
-        {
-            IsLoading = false;
+            FilteredProducts.Clear();
         }
     }
 
     [RelayCommand]
     private async Task AddToCart(Product? product)
     {
-        if (product == null) return;
+        if (product == null)
+        {
+            System.Diagnostics.Debug.WriteLine("AddToCart: product is null");
+            return;
+        }
 
+        System.Diagnostics.Debug.WriteLine($"AddToCart called for product: {product.Name}, Id: {product.Id}");
+        
         try
         {
             var success = await _cartService.AddToCartAsync(product.Id);
+            System.Diagnostics.Debug.WriteLine($"AddToCart result: {success}");
             if (success)
             {
                 await UpdateCartCount();
                 ToastService.Instance.ShowSuccess($"{product.Name} added to cart!");
+            }
+            else
+            {
+                ToastService.Instance.ShowError("Failed to add to cart");
             }
         }
         catch (Exception ex)
         {
             ToastService.Instance.ShowError("Failed to add to cart");
             System.Diagnostics.Debug.WriteLine($"Error adding to cart: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
         }
     }
 
     [RelayCommand]
     private void NavigateToProductDetail(Product? product)
     {
-        if (product != null)
+        if (product == null)
+        {
+            System.Diagnostics.Debug.WriteLine("NavigateToProductDetail: product is null");
+            return;
+        }
+
+        System.Diagnostics.Debug.WriteLine($"NavigateToProductDetail called for product: {product.Name}, Id: {product.Id}");
+        
+        try
         {
             var pageType = typeof(Uno_Platform.Views.ProductDetailPage);
-            ServiceLocator.NavigationService.NavigateTo(pageType, product);
+            var success = ServiceLocator.NavigationService.NavigateTo(pageType, product);
+            System.Diagnostics.Debug.WriteLine($"Navigation result: {success}");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error navigating to product detail: {ex.Message}");
+            System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
         }
     }
 
