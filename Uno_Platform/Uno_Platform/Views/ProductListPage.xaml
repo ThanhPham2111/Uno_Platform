@@ -1,0 +1,147 @@
+<Page x:Class="Uno_Platform.Views.ProductListPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:Uno_Platform.Views"
+      xmlns:models="using:Uno_Platform.Models"
+      xmlns:controls="using:Uno_Platform.Controls"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    
+    <!-- Header -->
+    <Border Grid.Row="0" 
+            Background="#0078D4" 
+            Padding="20">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Products" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   Foreground="White"
+                   Grid.Column="0"/>
+        <Button Content="Refresh" 
+                Command="{x:Bind ViewModel.RefreshProductsCommand}"
+                Grid.Column="1"
+                Margin="10,0,0,0"/>
+      </Grid>
+    </Border>
+    
+    <!-- Product List -->
+    <ScrollViewer Grid.Row="1" Padding="20">
+      <StackPanel Spacing="15">
+        
+        <!-- Search Section -->
+        <Border Background="{StaticResource SurfaceBrush}" 
+                Padding="15" 
+                CornerRadius="{StaticResource BorderRadiusMedium}">
+          <StackPanel Spacing="10">
+            <TextBlock Text="Search Products" 
+                       Style="{StaticResource LabelStyle}"/>
+            <TextBox Text="{x:Bind ViewModel.SearchKeyword, Mode=TwoWay}"
+                     PlaceholderText="Enter keyword..."
+                     Style="{StaticResource StandardTextBoxStyle}"/>
+            <Button Content="Search" 
+                    Command="{x:Bind ViewModel.SearchCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}"/>
+          </StackPanel>
+        </Border>
+        
+        <!-- Filter Section -->
+        <Border Background="{StaticResource SecondaryBrush}" 
+                Padding="15" 
+                CornerRadius="{StaticResource BorderRadiusMedium}">
+          <StackPanel Spacing="10">
+            <TextBlock Text="Filter by Price" 
+                       Style="{StaticResource LabelStyle}"/>
+            <Grid ColumnDefinitions="*,*,Auto" ColumnSpacing="10">
+              <StackPanel Grid.Column="0">
+                <TextBlock Text="Min Price" FontSize="12" Margin="0,0,0,5"/>
+                <TextBox x:Name="MinPriceTextBox"
+                         TextChanging="MinPriceTextBox_TextChanging"
+                         PlaceholderText="0.00"
+                         InputScope="Number"
+                         Style="{StaticResource StandardTextBoxStyle}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="1">
+                <TextBlock Text="Max Price" FontSize="12" Margin="0,0,0,5"/>
+                <TextBox x:Name="MaxPriceTextBox"
+                         TextChanging="MaxPriceTextBox_TextChanging"
+                         PlaceholderText="9999.99"
+                         InputScope="Number"
+                         Style="{StaticResource StandardTextBoxStyle}"/>
+              </StackPanel>
+              <StackPanel Grid.Column="2" VerticalAlignment="Bottom" Spacing="5">
+                <Button Content="Filter" 
+                        Command="{x:Bind ViewModel.FilterCommand}"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        MinWidth="80"/>
+                <Button Content="Clear" 
+                        Command="{x:Bind ViewModel.ClearFilterCommand}"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        MinWidth="80"/>
+              </StackPanel>
+            </Grid>
+          </StackPanel>
+        </Border>
+        
+        <!-- Products List -->
+        <ItemsControl x:Name="ProductsItemsControl" ItemsSource="{x:Bind ViewModel.Products, Mode=OneWay}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="models:Product">
+              <Border Style="{StaticResource CardStyle}">
+                <Button Click="ProductButton_Click"
+                        Tag="{x:Bind}"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch">
+                  <Button.Content>
+                    <StackPanel Orientation="Horizontal" Spacing="15">
+                      <TextBlock Text="{x:Bind Image}" 
+                                 FontSize="48"
+                                 VerticalAlignment="Center"/>
+                      <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="{x:Bind Name}" 
+                                   FontSize="20" 
+                                   FontWeight="SemiBold"/>
+                        <TextBlock Text="{x:Bind Price, Converter={StaticResource PriceFormatConverter}}" 
+                                   FontSize="16"
+                                   Foreground="#0078D4"
+                                   Margin="0,5,0,0"/>
+                        <TextBlock Text="{x:Bind Description}" 
+                                   FontSize="14"
+                                   Foreground="Gray"
+                                   TextWrapping="Wrap"
+                                   Margin="0,5,0,0"
+                                   MaxWidth="300"/>
+                      </StackPanel>
+                    </StackPanel>
+                  </Button.Content>
+                </Button>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        
+        <!-- Empty State -->
+        <TextBlock x:Name="EmptyStateText"
+                   Text="No products found" 
+                   HorizontalAlignment="Center"
+                   FontSize="18"
+                   Foreground="Gray"
+                   Margin="0,40,0,0"
+                   Visibility="Collapsed"/>
+        
+      </StackPanel>
+    </ScrollViewer>
+    
+    <!-- Loading Indicator Overlay -->
+    <controls:LoadingIndicator IsLoading="{x:Bind ViewModel.IsLoading, Mode=OneWay}"
+                               Message="Loading products..."/>
+  </Grid>
+</Page>
+

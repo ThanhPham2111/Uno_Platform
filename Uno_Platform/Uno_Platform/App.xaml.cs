@@ -1,6 +1,8 @@
 using System;
 using Microsoft.Extensions.Logging;
 using Uno.Resizetizer;
+using Uno_Platform.Services;
+using Uno_Platform.Database;
 
 namespace Uno_Platform;
 
@@ -13,6 +15,11 @@ public partial class App : Application
     public App()
     {
         this.InitializeComponent();
+        
+#if !__WASM__
+        // Initialize SQLite for non-WebAssembly platforms
+        SQLitePCLRaw.batteries_v2.Batteries_V2.Init();
+#endif
     }
 
     protected Window? MainWindow { get; private set; }
@@ -24,6 +31,8 @@ public partial class App : Application
         MainWindow.UseStudio();
 #endif
 
+        // Initialize database and seed sample data
+        InitializeDatabase();
 
         // Do not repeat app initialization when the Window already has content,
         // just ensure that the window is active
@@ -36,19 +45,33 @@ public partial class App : Application
             MainWindow.Content = rootFrame;
 
             rootFrame.NavigationFailed += OnNavigationFailed;
+            
+            // Initialize NavigationService
+            ServiceLocator.NavigationService.Initialize(rootFrame);
         }
 
         if (rootFrame.Content == null)
         {
-            // When the navigation stack isn't restored navigate to the first page,
-            // configuring the new page by passing required information as a navigation
-            // parameter
-            rootFrame.Navigate(typeof(MainPage), args.Arguments);
+            // Navigate to LoginPage as the first page
+            rootFrame.Navigate(typeof(Views.LoginPage), args.Arguments);
         }
 
         MainWindow.SetWindowIcon();
         // Ensure the current window is active
         MainWindow.Activate();
+    }
+
+    private void InitializeDatabase()
+    {
+        try
+        {
+            var dbService = new DatabaseService();
+            dbService.SeedSampleData();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error initializing database: {ex.Message}");
+        }
     }
 
     /// <summary>

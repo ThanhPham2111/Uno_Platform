@@ -1,15 +1,25 @@
 <Application x:Class="Uno_Platform.App"
        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:converters="using:Uno_Platform.Converters">
 
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <!-- Load WinUI resources -->
         <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+        <!-- Load Theme -->
+        <ResourceDictionary Source="Themes/Theme.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
-      <!-- Add resources here -->
+      <!-- Converters -->
+      <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter" />
+      <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+      <converters:InverseVisibilityConverter x:Key="InverseVisibilityConverter" />
+      <converters:EditModeConverter x:Key="EditModeConverter" />
+      <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
+      <converters:PriceFormatConverter x:Key="PriceFormatConverter" />
+      <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 
     </ResourceDictionary>
   </Application.Resources>

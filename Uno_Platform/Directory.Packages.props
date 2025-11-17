@@ -6,5 +6,10 @@
     See https://aka.platform.uno/using-uno-sdk#implicit-packages for more information regarding the Implicit Packages.
   -->
   <ItemGroup>
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' != 'net9.0-browserwasm'">
+    <PackageVersion Include="SQLitePCLRaw.bundle_green" Version="2.1.7" />
   </ItemGroup>
 </Project>
