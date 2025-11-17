@@ -8,9 +8,9 @@ public class EditModeConverter : IValueConverter
     {
         if (value is bool boolValue)
         {
-            return boolValue ? "Cancel" : "Edit";
+            return boolValue ? "Edit Product" : "Create Product";
         }
-        return "Edit";
+        return "Create Product";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

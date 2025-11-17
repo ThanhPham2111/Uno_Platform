@@ -36,24 +36,14 @@ public partial class App : Application
 
         // Do not repeat app initialization when the Window already has content,
         // just ensure that the window is active
-        if (MainWindow.Content is not Frame rootFrame)
+        if (MainWindow.Content == null)
         {
-            // Create a Frame to act as the navigation context and navigate to the first page
-            rootFrame = new Frame();
-
-            // Place the frame in the current Window
-            MainWindow.Content = rootFrame;
-
-            rootFrame.NavigationFailed += OnNavigationFailed;
+            // Create AppShell as the main navigation container
+            var appShell = new Views.AppShell();
+            MainWindow.Content = appShell;
             
-            // Initialize NavigationService
-            ServiceLocator.NavigationService.Initialize(rootFrame);
-        }
-
-        if (rootFrame.Content == null)
-        {
-            // Navigate to LoginPage as the first page
-            rootFrame.Navigate(typeof(Views.LoginPage), args.Arguments);
+            // Initialize NavigationService with the AppShell's internal frame
+            ServiceLocator.NavigationService.Initialize(appShell.GetContentFrame());
         }
 
         MainWindow.SetWindowIcon();
@@ -63,10 +53,15 @@ public partial class App : Application
 
     private void InitializeDatabase()
     {
+        // Initialize database asynchronously without blocking UI
+        _ = InitializeDatabaseAsync();
+    }
+
+    private async Task InitializeDatabaseAsync()
+    {
         try
         {
-            var dbService = new DatabaseService();
-            dbService.SeedSampleData();
+            await ServiceLocator.DataSeedService.SeedDataAsync();
         }
         catch (Exception ex)
         {

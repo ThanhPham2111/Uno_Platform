@@ -1,0 +1,46 @@
+<Page x:Class="Uno_Platform.Views.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BackgroundGradientBrush}">
+  <ScrollViewer Padding="{StaticResource SpacingL}">
+    <StackPanel Spacing="{StaticResource SpacingL}" MaxWidth="800">
+      
+      <!-- Page Title -->
+      <TextBlock Text="Settings"
+                 Style="{StaticResource Heading1Style}"
+                 Margin="0,0,0,{StaticResource SpacingM}"/>
+
+      <!-- Settings Sections -->
+      <Border Style="{StaticResource ElevatedCardStyle}">
+        <StackPanel Spacing="{StaticResource SpacingM}">
+          <TextBlock Text="Appearance"
+                     Style="{StaticResource Heading3Style}"/>
+          <TextBlock Text="Manage your app theme and display preferences"
+                     Style="{StaticResource SecondaryTextStyle}"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource ElevatedCardStyle}">
+        <StackPanel Spacing="{StaticResource SpacingM}">
+          <TextBlock Text="Notifications"
+                     Style="{StaticResource Heading3Style}"/>
+          <TextBlock Text="Configure notification preferences"
+                     Style="{StaticResource SecondaryTextStyle}"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource ElevatedCardStyle}">
+        <StackPanel Spacing="{StaticResource SpacingM}">
+          <TextBlock Text="About"
+                     Style="{StaticResource Heading3Style}"/>
+          <TextBlock Text="Tech Store v1.0"
+                     Style="{StaticResource SecondaryTextStyle}"/>
+          <TextBlock Text="A modern shopping app built with Uno Platform"
+                     Style="{StaticResource SecondaryTextStyle}"/>
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+</Page>
+

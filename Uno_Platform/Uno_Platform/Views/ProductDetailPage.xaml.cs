@@ -19,21 +19,17 @@ public sealed partial class ProductDetailPage : Page
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
         base.OnNavigatedTo(e);
+        PageEnterAnimation.Begin();
         if (e.Parameter is Product product)
         {
-            ViewModel.LoadProduct(product);
+            _ = ViewModel.LoadProductAsync(product);
         }
-    }
-
-    private void PriceTextBox_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
-    {
-        if (sender != null && !string.IsNullOrWhiteSpace(sender.Text))
+        else
         {
-            if (decimal.TryParse(sender.Text, out decimal price))
-            {
-                ViewModel.Price = price;
-            }
+            // If no product provided, navigate back
+            ViewModel.GoBackCommand.Execute(null);
+            return;
         }
+        ImageFadeIn.Begin();
     }
 }
-

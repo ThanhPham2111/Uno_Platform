@@ -46,6 +46,7 @@ public class AppDbContext
     private void CreateTables()
     {
         Connection.CreateTable<Product>();
+        Connection.CreateTable<CartItem>();
     }
 
     public void CloseConnection()

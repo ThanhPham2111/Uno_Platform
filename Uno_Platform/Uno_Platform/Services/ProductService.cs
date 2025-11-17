@@ -1,112 +1,88 @@
 using Uno_Platform.Models;
+using Uno_Platform.Repositories;
 
 namespace Uno_Platform.Services;
 
 public class ProductService
 {
-    private readonly DatabaseService _databaseService;
+    private readonly IProductRepository _repository;
 
-    public ProductService()
+    public ProductService(IProductRepository repository)
     {
-        _databaseService = new DatabaseService();
+        _repository = repository;
     }
 
-    public List<Product> SearchProducts(string keyword)
+    public async Task<List<Product>> GetAllProductsAsync()
+    {
+        return await _repository.GetAllProductsAsync();
+    }
+
+    public async Task<Product?> GetProductByIdAsync(int id)
+    {
+        return await _repository.GetProductByIdAsync(id);
+    }
+
+    public async Task<List<Product>> SearchProductsAsync(string keyword)
     {
         if (string.IsNullOrWhiteSpace(keyword))
-        {
-            return GetAllProducts();
-        }
-
-        var allProducts = GetAllProducts();
-        var lowerKeyword = keyword.ToLowerInvariant();
-
-        return allProducts.Where(p =>
-            p.Name.ToLowerInvariant().Contains(lowerKeyword) ||
-            p.Description.ToLowerInvariant().Contains(lowerKeyword)
-        ).ToList();
+            return await GetAllProductsAsync();
+        
+        return await _repository.SearchProductsAsync(keyword);
     }
 
-    public List<Product> FilterByPrice(decimal? minPrice, decimal? maxPrice)
+    public async Task<List<Product>> GetProductsByCategoryAsync(string category)
     {
-        var allProducts = GetAllProducts();
-
-        if (minPrice.HasValue && maxPrice.HasValue)
-        {
-            return allProducts.Where(p => p.Price >= minPrice.Value && p.Price <= maxPrice.Value).ToList();
-        }
-
-        if (minPrice.HasValue)
-        {
-            return allProducts.Where(p => p.Price >= minPrice.Value).ToList();
-        }
-
-        if (maxPrice.HasValue)
-        {
-            return allProducts.Where(p => p.Price <= maxPrice.Value).ToList();
-        }
-
-        return allProducts;
+        if (string.IsNullOrWhiteSpace(category))
+            return await GetAllProductsAsync();
+        
+        return await _repository.GetProductsByCategoryAsync(category);
     }
 
-    public List<Product> GetAllProducts()
+    public async Task<List<Product>> GetProductsByPriceRangeAsync(decimal minPrice, decimal maxPrice)
     {
-        return _databaseService.GetAllProducts();
+        return await _repository.GetProductsByPriceRangeAsync(minPrice, maxPrice);
     }
 
-    public Product? GetProductById(int id)
-    {
-        return _databaseService.GetProductById(id);
-    }
-
-    public bool AddProduct(Product product)
+    public async Task<bool> AddProductAsync(Product product)
     {
         if (!ValidateProduct(product))
-        {
             return false;
-        }
-
-        return _databaseService.AddProduct(product);
+        
+        return await _repository.AddProductAsync(product);
     }
 
-    public bool UpdateProduct(Product product)
+    public async Task<bool> UpdateProductAsync(Product product)
     {
         if (!ValidateProduct(product))
-        {
             return false;
-        }
-
-        return _databaseService.UpdateProduct(product);
+        
+        return await _repository.UpdateProductAsync(product);
     }
 
-    public bool DeleteProduct(int id)
+    public async Task<bool> DeleteProductAsync(int id)
     {
-        return _databaseService.DeleteProduct(id);
+        return await _repository.DeleteProductAsync(id);
+    }
+
+    public async Task<List<string>> GetAllCategoriesAsync()
+    {
+        return await _repository.GetAllCategoriesAsync();
     }
 
     private bool ValidateProduct(Product product)
     {
-        if (string.IsNullOrWhiteSpace(product.Name))
-        {
+        if (string.IsNullOrWhiteSpace(product.Name) || product.Name.Length < 2)
             return false;
-        }
-
-        if (product.Name.Length < 2)
-        {
-            return false;
-        }
-
+        
         if (product.Price < 0)
-        {
             return false;
-        }
-
+        
         if (string.IsNullOrWhiteSpace(product.Description))
-        {
             return false;
-        }
-
+        
+        if (string.IsNullOrWhiteSpace(product.Category))
+            return false;
+        
         return true;
     }
 }
-

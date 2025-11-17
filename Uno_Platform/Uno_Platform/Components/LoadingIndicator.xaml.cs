@@ -1,6 +1,6 @@
 using Microsoft.UI.Xaml.Controls;
 
-namespace Uno_Platform.Controls;
+namespace Uno_Platform.Components;
 
 public sealed partial class LoadingIndicator : UserControl
 {

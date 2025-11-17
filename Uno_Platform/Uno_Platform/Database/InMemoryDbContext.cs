@@ -2,48 +2,67 @@ using Uno_Platform.Models;
 
 namespace Uno_Platform.Database;
 
-#if __WASM__
 public class InMemoryDbContext
 {
-    private static List<Product> _products = new();
-    private static int _nextId = 1;
+    private readonly List<Product> _products = new();
+    private readonly List<CartItem> _cartItems = new();
+    private int _nextProductId = 1;
+    private int _nextCartItemId = 1;
 
-    public List<Product> Products => _products;
+    public List<Product> GetAllProducts() => _products.ToList();
+
+    public Product? GetProductById(int id) => _products.FirstOrDefault(p => p.Id == id);
 
     public void AddProduct(Product product)
     {
-        product.Id = _nextId++;
+        product.Id = _nextProductId++;
+        product.Image = "Assets/img/caby.png"; // Always use default image
         _products.Add(product);
     }
 
     public void UpdateProduct(Product product)
     {
-        var existing = _products.FirstOrDefault(p => p.Id == product.Id);
-        if (existing != null)
+        product.Image = "Assets/img/caby.png"; // Always use default image
+        var index = _products.FindIndex(p => p.Id == product.Id);
+        if (index >= 0)
         {
-            var index = _products.IndexOf(existing);
             _products[index] = product;
         }
     }
 
     public void DeleteProduct(int id)
     {
-        var product = _products.FirstOrDefault(p => p.Id == id);
-        if (product != null)
+        _products.RemoveAll(p => p.Id == id);
+    }
+
+    public List<CartItem> GetAllCartItems() => _cartItems.ToList();
+
+    public CartItem? GetCartItemByProductId(int productId) => _cartItems.FirstOrDefault(c => c.ProductId == productId);
+
+    public void AddCartItem(CartItem item)
+    {
+        item.Id = _nextCartItemId++;
+        item.ProductImage = "Assets/img/caby.png"; // Always use default image
+        _cartItems.Add(item);
+    }
+
+    public void UpdateCartItem(CartItem item)
+    {
+        item.ProductImage = "Assets/img/caby.png"; // Always use default image
+        var index = _cartItems.FindIndex(c => c.Id == item.Id);
+        if (index >= 0)
         {
-            _products.Remove(product);
+            _cartItems[index] = item;
         }
     }
 
-    public Product? GetProductById(int id)
+    public void DeleteCartItem(int id)
     {
-        return _products.FirstOrDefault(p => p.Id == id);
+        _cartItems.RemoveAll(c => c.Id == id);
     }
 
-    public List<Product> GetAllProducts()
+    public void ClearCart()
     {
-        return _products.ToList();
+        _cartItems.Clear();
     }
 }
-#endif
-

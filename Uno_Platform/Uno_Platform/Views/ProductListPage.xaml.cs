@@ -19,65 +19,32 @@ public sealed partial class ProductListPage : Page
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
         base.OnNavigatedTo(e);
-        ViewModel.LoadProducts();
+        PageEnterAnimation.Begin();
+        UpdateEmptyState();
+        ViewModel.RefreshCommand.Execute(null);
     }
 
     protected override void OnNavigatedFrom(NavigationEventArgs e)
     {
         base.OnNavigatedFrom(e);
-        // Update empty state when products change
-        if (ViewModel.Products != null)
-        {
-            UpdateEmptyState();
-        }
-    }
-
-    private void ProductButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
-    {
-        if (sender is Button button && button.Tag is Product product)
-        {
-            ViewModel.NavigateToProductDetailCommand.Execute(product);
-        }
+        UpdateEmptyState();
     }
 
     private void UpdateEmptyState()
     {
-        if (EmptyStateText != null && ViewModel != null)
+        if (EmptyStateBorder != null && ViewModel != null)
         {
-            EmptyStateText.Visibility = ViewModel.Products.Count == 0 
-                ? Microsoft.UI.Xaml.Visibility.Visible 
+            EmptyStateBorder.Visibility = ViewModel.FilteredProducts.Count == 0
+                ? Microsoft.UI.Xaml.Visibility.Visible
                 : Microsoft.UI.Xaml.Visibility.Collapsed;
         }
     }
 
-    private void MinPriceTextBox_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
+    private void CategoryButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
-        if (sender != null && !string.IsNullOrWhiteSpace(sender.Text))
+        if (sender is Button button && button.Tag is string category)
         {
-            if (decimal.TryParse(sender.Text, out decimal price))
-            {
-                ViewModel.MinPrice = price;
-            }
-        }
-        else
-        {
-            ViewModel.MinPrice = null;
-        }
-    }
-
-    private void MaxPriceTextBox_TextChanging(TextBox sender, TextBoxTextChangingEventArgs args)
-    {
-        if (sender != null && !string.IsNullOrWhiteSpace(sender.Text))
-        {
-            if (decimal.TryParse(sender.Text, out decimal price))
-            {
-                ViewModel.MaxPrice = price;
-            }
-        }
-        else
-        {
-            ViewModel.MaxPrice = null;
+            ViewModel.SelectedCategory = category;
         }
     }
 }
-
