@@ -71,6 +71,22 @@
   <x:Double x:Key="SpacingXL">32</x:Double>
   <x:Double x:Key="SpacingXXL">48</x:Double>
 
+  <!-- Thickness Resources for Margin/Padding -->
+  <Thickness x:Key="SpacingXST">4</Thickness>
+  <Thickness x:Key="SpacingST">8</Thickness>
+  <Thickness x:Key="SpacingMT">16</Thickness>
+  <Thickness x:Key="SpacingLT">24</Thickness>
+  <Thickness x:Key="SpacingXLT">32</Thickness>
+  <Thickness x:Key="SpacingXXLT">48</Thickness>
+  
+  <!-- Common Margin/Padding Patterns -->
+  <Thickness x:Key="MarginSpacingM">0,0,16,24</Thickness>
+  <Thickness x:Key="PaddingSpacingL">24</Thickness>
+  <Thickness x:Key="PaddingSpacingXL">32</Thickness>
+  <Thickness x:Key="PaddingSpacingM">16</Thickness>
+  <Thickness x:Key="MarginSpacingL">24</Thickness>
+  <Thickness x:Key="MarginSpacingS">8</Thickness>
+
   <!-- Border Radius -->
   <CornerRadius x:Key="BorderRadiusSmall">8</CornerRadius>
   <CornerRadius x:Key="BorderRadiusMedium">12</CornerRadius>

@@ -72,7 +72,7 @@
                 Width="48"
                 Height="48"
                 Command="{x:Bind ViewModel.GoBackCommand}">
-          <SymbolIcon Symbol="Back" FontSize="24"/>
+          <SymbolIcon Symbol="Back"/>
         </Button>
         
         <TextBlock Grid.Column="1"
@@ -141,7 +141,7 @@
                        Padding="16,8"
                        HorizontalAlignment="Right"
                        VerticalAlignment="Top"
-                       Margin="{StaticResource SpacingM}"
+                       Margin="16"
                        Opacity="0.95">
               <TextBlock Text="{x:Bind ViewModel.Product.Category, Mode=OneWay}"
                         Foreground="White"
@@ -173,7 +173,7 @@
             <Border Background="{StaticResource AccentBrush}"
                    CornerRadius="{StaticResource BorderRadiusLarge}"
                    Padding="{StaticResource SpacingL}"
-                   Margin="0,{StaticResource SpacingM},0,0"
+                   Margin="0,16,0,0"
                    HorizontalAlignment="Left">
               <StackPanel Orientation="Horizontal" Spacing="12">
                 <TextBlock Text="💰"
@@ -218,7 +218,7 @@
             </StackPanel>
 
             <!-- Description Section -->
-            <StackPanel Spacing="{StaticResource SpacingS}" Margin="0,{StaticResource SpacingM},0,0">
+            <StackPanel Spacing="8" Margin="0,16,0,0">
               <TextBlock Text="Description"
                         Style="{StaticResource Heading3Style}"
                         Foreground="{StaticResource TextSecondaryBrush}"

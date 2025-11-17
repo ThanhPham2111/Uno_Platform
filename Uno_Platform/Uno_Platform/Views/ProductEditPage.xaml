@@ -62,7 +62,7 @@
                 Width="48"
                 Height="48"
                 Command="{x:Bind ViewModel.GoBackCommand}">
-          <SymbolIcon Symbol="Back" FontSize="24"/>
+          <SymbolIcon Symbol="Back"/>
         </Button>
         
         <TextBlock Grid.Column="1"
@@ -112,7 +112,7 @@
                        Style="{StaticResource SecondaryTextStyle}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Bottom"
-                       Margin="0,0,0,{StaticResource SpacingS}"
+                       Margin="0,0,0,8"
                        FontStyle="Italic"
                        FontSize="{StaticResource FontSizeSmall}"/>
           </Grid>

@@ -111,7 +111,7 @@
   </UserControl.Resources>
 
   <!-- Shadow Effect -->
-  <Grid Margin="0,0,0,{StaticResource SpacingM}">
+  <Grid Margin="0,0,0,16">
     <!-- Shadow Border -->
     <Border Background="#20000000"
            CornerRadius="{StaticResource BorderRadiusLarge}"

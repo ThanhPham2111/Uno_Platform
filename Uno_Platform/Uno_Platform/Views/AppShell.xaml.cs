@@ -65,24 +65,25 @@ public sealed partial class AppShell : Page
         CartIndicator.Opacity = 0;
         SettingsIndicator.Opacity = 0;
 
-        HomeIcon.Foreground = new SolidColorBrush(Microsoft.UI.Colors.Gray);
-        CartIcon.Foreground = new SolidColorBrush(Microsoft.UI.Colors.Gray);
-        SettingsIcon.Foreground = new SolidColorBrush(Microsoft.UI.Colors.Gray);
+        var grayColor = Windows.UI.Color.FromArgb(255, 128, 128, 128);
+        HomeIcon.Foreground = new SolidColorBrush(grayColor);
+        CartIcon.Foreground = new SolidColorBrush(grayColor);
+        SettingsIcon.Foreground = new SolidColorBrush(grayColor);
 
         // Activate selected tab
         switch (activeTab)
         {
             case "Home":
                 HomeIndicator.Opacity = 1;
-                HomeIcon.Foreground = new SolidColorBrush(Microsoft.UI.Color.FromArgb(255, 99, 102, 241)); // Primary color
+                HomeIcon.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 99, 102, 241)); // Primary color
                 break;
             case "Cart":
                 CartIndicator.Opacity = 1;
-                CartIcon.Foreground = new SolidColorBrush(Microsoft.UI.Color.FromArgb(255, 99, 102, 241)); // Primary color
+                CartIcon.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 99, 102, 241)); // Primary color
                 break;
             case "Settings":
                 SettingsIndicator.Opacity = 1;
-                SettingsIcon.Foreground = new SolidColorBrush(Microsoft.UI.Color.FromArgb(255, 99, 102, 241)); // Primary color
+                SettingsIcon.Foreground = new SolidColorBrush(Windows.UI.Color.FromArgb(255, 99, 102, 241)); // Primary color
                 break;
         }
     }

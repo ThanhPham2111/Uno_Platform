@@ -47,7 +47,7 @@
         <VisualState.Setters>
           <Setter Target="AppBar.Padding" Value="{StaticResource SpacingM}"/>
           <Setter Target="AppTitle.FontSize" Value="24"/>
-          <Setter Target="TabBar.Padding" Value="0,{StaticResource SpacingS},0,{StaticResource SpacingS}"/>
+          <Setter Target="TabBar.Padding" Value="0,8,0,8"/>
         </VisualState.Setters>
       </VisualState>
       <VisualState x:Name="Desktop">
@@ -82,9 +82,6 @@
         </LinearGradientBrush>
       </Border.Background>
       
-      <Border.Effect>
-        <!-- Subtle shadow effect -->
-      </Border.Effect>
 
       <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="{StaticResource SpacingM}">
         <!-- Title -->
@@ -106,7 +103,6 @@
                 Click="SearchButton_Click"
                 HorizontalAlignment="Right">
           <SymbolIcon Symbol="Find" 
-                     FontSize="24"
                      Foreground="{StaticResource TextPrimaryBrush}"/>
         </Button>
       </Grid>
@@ -132,7 +128,7 @@
     <Border Grid.Row="2"
             x:Name="TabBar"
             Background="{StaticResource AcrylicBrush}"
-            Padding="0,{StaticResource SpacingS},0,{StaticResource SpacingS}"
+            Padding="0,8,0,8"
             CornerRadius="16,0,0,0"
             BorderThickness="1,1,0,0"
             BorderBrush="{StaticResource BorderBrush}">
@@ -160,8 +156,7 @@
                 VerticalAlignment="Stretch">
           <StackPanel Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center">
             <SymbolIcon x:Name="HomeIcon"
-                       Symbol="Home"
-                       FontSize="22"/>
+                       Symbol="Home"/>
             <TextBlock Text="Home"
                       FontSize="10"
                       HorizontalAlignment="Center"
@@ -188,8 +183,7 @@
           <StackPanel Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid>
               <SymbolIcon x:Name="CartIcon"
-                         Symbol="Shop"
-                         FontSize="22"/>
+                         Symbol="Shop"/>
               <!-- Cart Badge -->
               <Border x:Name="CartBadge"
                      Background="{StaticResource SecondaryBrush}"
@@ -234,8 +228,7 @@
                 VerticalAlignment="Stretch">
           <StackPanel Spacing="4" HorizontalAlignment="Center" VerticalAlignment="Center">
             <SymbolIcon x:Name="SettingsIcon"
-                       Symbol="Setting"
-                       FontSize="22"/>
+                       Symbol="Setting"/>
             <TextBlock Text="Settings"
                       FontSize="10"
                       HorizontalAlignment="Center"
