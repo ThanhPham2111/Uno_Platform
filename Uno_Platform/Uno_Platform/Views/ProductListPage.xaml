@@ -92,7 +92,9 @@
         <GridView ItemsSource="{x:Bind ViewModel.FilteredProducts, Mode=OneWay}"
                   x:Name="ProductsItemsControl"
                   SelectionMode="None"
-                  IsItemClickEnabled="False">
+                  IsItemClickEnabled="False"
+                  IncrementalLoadingThreshold="3"
+                  IncrementalLoadingTrigger="Edge">
           <GridView.ItemContainerStyle>
             <Style TargetType="GridViewItem">
               <Setter Property="Margin" Value="0,0,20,20"/>

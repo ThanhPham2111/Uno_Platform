@@ -5,98 +5,20 @@
              xmlns:converters="using:Uno_Platform.Converters">
   
   <UserControl.Resources>
-    <!-- Card Tap Animation -->
-    <Storyboard x:Key="TapAnimation">
-      <DoubleAnimation Storyboard.TargetName="CardScale"
-                      Storyboard.TargetProperty="ScaleX"
-                      To="0.97"
-                      Duration="0:0:0.1">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseInOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-      <DoubleAnimation Storyboard.TargetName="CardScale"
-                      Storyboard.TargetProperty="ScaleY"
-                      To="0.97"
-                      Duration="0:0:0.1">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseInOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-      <DoubleAnimation Storyboard.TargetName="CardScale"
-                      Storyboard.TargetProperty="ScaleX"
-                      To="1.0"
-                      BeginTime="0:0:0.1"
-                      Duration="0:0:0.2">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-      <DoubleAnimation Storyboard.TargetName="CardScale"
-                      Storyboard.TargetProperty="ScaleY"
-                      To="1.0"
-                      BeginTime="0:0:0.1"
-                      Duration="0:0:0.2">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-    </Storyboard>
-
-    <!-- Hover Animation -->
+    <!-- Simplified Hover Animation - Only opacity changes -->
     <Storyboard x:Name="HoverAnimation">
-      <DoubleAnimation Storyboard.TargetName="CardScale"
-                      Storyboard.TargetProperty="ScaleX"
-                      To="1.05"
-                      Duration="0:0:0.3">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-      <DoubleAnimation Storyboard.TargetName="CardScale"
-                      Storyboard.TargetProperty="ScaleY"
-                      To="1.05"
-                      Duration="0:0:0.3">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseOut"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-      <DoubleAnimation Storyboard.TargetName="CardShadow"
-                      Storyboard.TargetProperty="Opacity"
-                      To="1"
-                      Duration="0:0:0.3"/>
       <DoubleAnimation Storyboard.TargetName="CardBorder"
                       Storyboard.TargetProperty="Opacity"
                       To="1"
-                      Duration="0:0:0.3"/>
+                      Duration="0:0:0.2"/>
     </Storyboard>
 
     <!-- Leave Animation -->
     <Storyboard x:Name="LeaveAnimation">
-      <DoubleAnimation Storyboard.TargetName="CardScale"
-                      Storyboard.TargetProperty="ScaleX"
-                      To="1.0"
-                      Duration="0:0:0.3">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseIn"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-      <DoubleAnimation Storyboard.TargetName="CardScale"
-                      Storyboard.TargetProperty="ScaleY"
-                      To="1.0"
-                      Duration="0:0:0.3">
-        <DoubleAnimation.EasingFunction>
-          <CubicEase EasingMode="EaseIn"/>
-        </DoubleAnimation.EasingFunction>
-      </DoubleAnimation>
-      <DoubleAnimation Storyboard.TargetName="CardShadow"
-                      Storyboard.TargetProperty="Opacity"
-                      To="0.5"
-                      Duration="0:0:0.3"/>
       <DoubleAnimation Storyboard.TargetName="CardBorder"
                       Storyboard.TargetProperty="Opacity"
-                      To="0.8"
-                      Duration="0:0:0.3"/>
+                      To="0.95"
+                      Duration="0:0:0.2"/>
     </Storyboard>
   </UserControl.Resources>
 
@@ -120,9 +42,6 @@
           PointerEntered="Border_PointerEntered"
           PointerExited="Border_PointerExited"
            Tapped="Card_Tapped">
-    <Border.RenderTransform>
-        <ScaleTransform x:Name="CardScale" CenterX="0.5" CenterY="0.5"/>
-    </Border.RenderTransform>
       
     <Grid>
       <Grid.RowDefinitions>

@@ -119,7 +119,7 @@ public partial class ProductListViewModel : ObservableObject
     [RelayCommand]
     private void Search()
     {
-        // Debounce search
+        // Debounce search - increased to 500ms for better performance
         _searchDebounceTimer?.Dispose();
         _searchDebounceTimer = new System.Threading.Timer(_ =>
         {
@@ -127,7 +127,7 @@ public partial class ProductListViewModel : ObservableObject
             {
                 ApplyFilters();
             });
-        }, null, 300, Timeout.Infinite);
+        }, null, 500, Timeout.Infinite);
     }
 
     partial void OnSearchKeywordChanged(string value)
@@ -188,12 +188,18 @@ public partial class ProductListViewModel : ObservableObject
                 );
             }
 
-            // Update ObservableCollection efficiently
-            FilteredProducts.Clear();
+            // Optimize collection update - only update if different
             var filteredList = filtered.ToList();
-            foreach (var product in filteredList)
+            
+            // Check if we need to update
+            if (FilteredProducts.Count != filteredList.Count || 
+                !FilteredProducts.SequenceEqual(filteredList))
             {
-                FilteredProducts.Add(product);
+                FilteredProducts.Clear();
+                foreach (var product in filteredList)
+                {
+                    FilteredProducts.Add(product);
+                }
             }
         }
         catch (Exception ex)
