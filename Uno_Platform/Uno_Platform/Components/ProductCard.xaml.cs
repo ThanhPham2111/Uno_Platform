@@ -65,19 +65,13 @@ public sealed partial class ProductCard : UserControl
         }
     }
 
-    private void AddToCart_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    private void AddToCart_Tapped(object sender, Microsoft.UI.Xaml.Input.TappedRoutedEventArgs e)
     {
-        if (AddToCartCommand != null && Product != null)
-        {
-            try
-            {
-                AddToCartCommand.Execute(Product);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error executing AddToCartCommand: {ex.Message}");
-            }
-        }
+        // Prevent the event from bubbling up to the Card_Tapped handler
+        e.Handled = true;
+        
+        // The Button will automatically execute its Command.
+        // We only need to stop the event from bubbling to the parent Border.
     }
 
     private void Border_PointerEntered(object sender, Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)

@@ -1,29 +1,49 @@
 using Uno_Platform.Database;
 using Uno_Platform.Models;
+using Uno_Platform.Services;
 
 namespace Uno_Platform.Repositories;
 
 public class ProductRepository : IProductRepository
 {
-    // Use InMemoryDbContext for all platforms for simplicity and reliability
     private readonly InMemoryDbContext _dbContext;
+    private readonly ApiService _apiService;
 
     public ProductRepository()
     {
         _dbContext = new InMemoryDbContext();
-        System.Diagnostics.Debug.WriteLine("=== ProductRepository: Using InMemoryDbContext ===");
+        _apiService = ServiceLocator.ApiService;
+        System.Diagnostics.Debug.WriteLine("=== ProductRepository: Initialized with API Service ===");
     }
 
-    public Task<List<Product>> GetAllProductsAsync()
+    public async Task<List<Product>> GetAllProductsAsync()
     {
-        var products = _dbContext.GetAllProducts();
-        System.Diagnostics.Debug.WriteLine($"=== ProductRepository: GetAllProductsAsync returned {products.Count} products ===");
-        return Task.FromResult(products);
+        // Ưu tiên gọi API, nếu thất bại thì dùng InMemory
+        try
+        {
+            var products = await _apiService.GetProductsAsync();
+            if (products != null && products.Any())
+            {
+                System.Diagnostics.Debug.WriteLine($"=== ProductRepository: Got {products.Count} products from API ===");
+                return products;
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"=== ProductRepository: API call failed, using fallback: {ex.Message} ===");
+        }
+
+        // Fallback: dùng InMemory data
+        var fallbackProducts = _dbContext.GetAllProducts();
+        System.Diagnostics.Debug.WriteLine($"=== ProductRepository: Using fallback, returned {fallbackProducts.Count} products. First item: {fallbackProducts.FirstOrDefault()?.Name} ===");
+        return fallbackProducts;
     }
 
     public Task<Product?> GetProductByIdAsync(int id)
     {
-        return Task.FromResult(_dbContext.GetProductById(id));
+        var p = _dbContext.GetProductById(id);
+        System.Diagnostics.Debug.WriteLine($"=== ProductRepository: GetProductById({id}) returned {p?.Name} Price={p?.Price} ===");
+        return Task.FromResult(p);
     }
 
     public Task<List<Product>> SearchProductsAsync(string keyword)

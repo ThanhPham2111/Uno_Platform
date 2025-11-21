@@ -2,23 +2,15 @@ using Microsoft.UI.Xaml.Data;
 
 namespace Uno_Platform.Converters;
 
-public class PriceFormatConverter : IValueConverter
+public class StringToBooleanConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {
-        if (value is decimal price)
+        if (value is string text)
         {
-            return $"{price:N0} đ";
+            return !string.IsNullOrWhiteSpace(text);
         }
-        if (value is double priceDouble)
-        {
-            return $"{priceDouble:N0} đ";
-        }
-        if (value is int priceInt)
-        {
-            return $"{priceInt:N0} đ";
-        }
-        return "0 đ";
+        return false;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -26,4 +18,3 @@ public class PriceFormatConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
-

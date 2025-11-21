@@ -10,7 +10,7 @@ namespace Uno_Platform.ViewModels;
 public partial class ProductListViewModel : ObservableObject
 {
     private readonly ProductService _productService;
-    private readonly CartService _cartService;
+    private readonly ICartService _cartService;
     private System.Threading.Timer? _searchDebounceTimer;
 
     ~ProductListViewModel()

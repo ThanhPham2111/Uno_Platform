@@ -152,6 +152,14 @@ public partial class ProductEditViewModel : ObservableObject
 
             if (success)
             {
+                // Update cart if product is in cart
+                if (IsEditMode)
+                {
+                    // We need CartService here. Since it's not injected, we use ServiceLocator
+                    // Ideally we should inject ICartService, but to minimize changes we use ServiceLocator
+                    await ServiceLocator.CartService.UpdateProductInCartAsync(Product);
+                }
+
                 ToastService.Instance.ShowSuccess(IsEditMode ? "Product updated!" : "Product created!");
                 await Task.Delay(500); // Small delay for user to see success message
                 GoBack();

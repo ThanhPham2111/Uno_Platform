@@ -8,7 +8,7 @@ namespace Uno_Platform.ViewModels;
 public partial class ProductDetailViewModel : ObservableObject
 {
     private readonly ProductService _productService;
-    private readonly CartService _cartService;
+    private readonly ICartService _cartService;
 
     [ObservableProperty]
     private Product? product;

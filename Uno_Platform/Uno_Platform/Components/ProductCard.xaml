@@ -139,7 +139,8 @@
                   Content="Add Cart"
                   Style="{StaticResource PrimaryButtonStyle}"
                   Command="{x:Bind AddToCartCommand}"
-                  CommandParameter="{x:Bind Product, Mode=OneWay}"/>
+                  CommandParameter="{x:Bind Product, Mode=OneWay}"
+                  Tapped="AddToCart_Tapped"/>
         </Grid>
 
           </Grid>

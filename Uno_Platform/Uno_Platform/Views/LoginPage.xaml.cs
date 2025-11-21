@@ -21,5 +21,11 @@ public sealed partial class LoginPage : Page
             ViewModel.Password = passwordBox.Password;
         }
     }
+
+    private void BackButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        // Navigate back to Home
+        Frame.Navigate(typeof(Uno_Platform.Views.ProductListPage));
+    }
 }
 

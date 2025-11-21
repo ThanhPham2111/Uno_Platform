@@ -83,7 +83,7 @@
       </Border.Background>
       
 
-      <Grid ColumnDefinitions="Auto,*" ColumnSpacing="{StaticResource SpacingM}">
+      <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="{StaticResource SpacingM}">
         <!-- Title -->
         <TextBlock Grid.Column="0"
                    x:Name="AppTitle"
@@ -122,6 +122,16 @@
                      TextChanged="GlobalSearchBox_TextChanged"/>
           </Grid>
         </Border>
+
+        <!-- Login Button -->
+        <Button Grid.Column="2"
+                x:Name="HeaderLoginButton"
+                Content="Login"
+                Click="HeaderLoginButton_Click"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Padding="16,8"
+                MinHeight="36"
+                FontSize="{StaticResource FontSizeSmall}"/>
       </Grid>
     </Border>
 

@@ -37,6 +37,8 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="sqlite-net-pcl" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' != 'net9.0-browserwasm'">

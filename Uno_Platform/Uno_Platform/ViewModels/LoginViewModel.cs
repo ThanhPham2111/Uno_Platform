@@ -35,8 +35,8 @@ public partial class LoginViewModel : ObservableObject
         {
             if (_authService.Login(Username, Password))
             {
-                // Navigate to HomePage
-                var homePageType = typeof(Uno_Platform.Views.HomePage);
+                // Navigate to ProductListPage (Home)
+                var homePageType = typeof(Uno_Platform.Views.ProductListPage);
                 ServiceLocator.NavigationService.NavigateTo(homePageType);
             }
             else

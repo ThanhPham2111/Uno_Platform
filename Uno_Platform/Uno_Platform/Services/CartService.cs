@@ -3,7 +3,7 @@ using Uno_Platform.Repositories;
 
 namespace Uno_Platform.Services;
 
-public class CartService
+public class CartService : ICartService
 {
     private readonly ICartRepository _cartRepository;
     private readonly IProductRepository _productRepository;
@@ -30,7 +30,11 @@ public class CartService
     {
         var product = await _productRepository.GetProductByIdAsync(productId);
         if (product == null)
+        {
+            System.Diagnostics.Debug.WriteLine($"=== CartService: Product {productId} not found ===");
             return false;
+        }
+        System.Diagnostics.Debug.WriteLine($"=== CartService: Adding {product.Name} Price={product.Price} to cart ===");
 
         var existingItem = await _cartRepository.GetCartItemByProductIdAsync(productId);
         
@@ -111,5 +115,20 @@ public class CartService
     {
         var items = await _cartRepository.GetAllCartItemsAsync();
         return items.Sum(item => item.TotalPrice);
+    }
+
+    public async Task UpdateProductInCartAsync(Product product)
+    {
+        var item = await _cartRepository.GetCartItemByProductIdAsync(product.Id);
+        if (item != null)
+        {
+            item.ProductName = product.Name;
+            item.ProductPrice = product.Price;
+            item.ProductCategory = product.Category;
+            // item.ProductImage = product.Image; // Image is handled in repository for now
+            
+            await _cartRepository.UpdateCartItemAsync(item);
+            System.Diagnostics.Debug.WriteLine($"=== CartService: Updated cart item for product {product.Name} ===");
+        }
     }
 }

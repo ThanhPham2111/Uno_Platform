@@ -26,11 +26,31 @@ public sealed partial class AppShell : Page
         // Initialize badge
         _ = InitializeCartBadgeAsync();
 
-        // Listen to frame navigation to update header visibility
-        ContentFrame.Navigated += (s, e) => UpdateHeaderVisibility();
+        // Listen to frame navigation to update header/tabbar visibility
+        ContentFrame.Navigated += (s, e) => 
+        {
+            UpdateHeaderVisibility();
+            UpdateTabBarVisibility();
+        };
 
-        // Set initial page
+        // Check authentication (Optional - removed mandatory check)
+        // var authService = new AuthenticationService();
+        // if (authService.IsAuthenticated) ...
+        
+        // Always start at Home
         NavigateToHome();
+    }
+
+    private void HeaderLoginButton_Click(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        NavigateToLogin();
+    }
+
+    private void NavigateToLogin()
+    {
+        // Navigate to Login page
+        ContentFrame.Navigate(typeof(LoginPage));
+        PlayPageTransition();
     }
 
     private async Task InitializeCartBadgeAsync()
@@ -49,7 +69,7 @@ public sealed partial class AppShell : Page
             ContentFrame.Navigate(typeof(ProductListPage));
         }
         UpdateTabIndicators("Home");
-        UpdateHeaderVisibility();
+        // Visibility updates handled by Navigated event
         PlayPageTransition();
     }
 
@@ -63,7 +83,7 @@ public sealed partial class AppShell : Page
             ContentFrame.Navigate(typeof(CartPage));
         }
         UpdateTabIndicators("Cart");
-        UpdateHeaderVisibility();
+        // Visibility updates handled by Navigated event
         PlayPageTransition();
     }
 
@@ -77,20 +97,38 @@ public sealed partial class AppShell : Page
             ContentFrame.Navigate(typeof(SettingsPage));
         }
         UpdateTabIndicators("Settings");
-        UpdateHeaderVisibility();
+        // Visibility updates handled by Navigated event
         PlayPageTransition();
     }
 
     private void UpdateHeaderVisibility()
     {
         // Show header only on Home page (ProductListPage)
-        if (ContentFrame.Content is ProductListPage)
+        // Hide on Login page
+        if (ContentFrame.Content is LoginPage)
+        {
+            AppBarBorder.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+        }
+        else if (ContentFrame.Content is ProductListPage)
         {
             AppBarBorder.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
         }
         else
         {
             AppBarBorder.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+        }
+    }
+
+    private void UpdateTabBarVisibility()
+    {
+        // Hide TabBar on Login page
+        if (ContentFrame.Content is LoginPage)
+        {
+            TabBar.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+        }
+        else
+        {
+            TabBar.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
         }
     }
 

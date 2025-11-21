@@ -64,12 +64,17 @@ public partial class App : Application
         {
             System.Diagnostics.Debug.WriteLine("=== App: Starting InitializeDatabaseAsync ===");
             
-            // Force initialize database connection first
-#if __ANDROID__ || __IOS__ || __MACOS__
-            var dbContext = ServiceLocator.DbContext;
-            System.Diagnostics.Debug.WriteLine($"Database connection initialized: {dbContext != null}");
+            // Initialize EF Core database for Cart (Android/iOS)
+#if !__WASM__
+            using (var dbContext = new Database.EfAppDbContext())
+            {
+                // Ensure database is created
+                await dbContext.Database.EnsureCreatedAsync();
+                System.Diagnostics.Debug.WriteLine("=== App: EF Core database initialized ===");
+            }
 #endif
             
+            // Seed sample product data (for fallback when API is unavailable)
             await ServiceLocator.DataSeedService.SeedDataAsync();
             System.Diagnostics.Debug.WriteLine("=== App: Database initialization completed ===");
         }

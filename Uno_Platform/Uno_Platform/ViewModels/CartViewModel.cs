@@ -8,7 +8,7 @@ namespace Uno_Platform.ViewModels;
 
 public partial class CartViewModel : ObservableObject
 {
-    private readonly CartService _cartService;
+    private readonly ICartService _cartService;
 
     [ObservableProperty]
     private ObservableCollection<CartItem> cartItems = new();
@@ -133,12 +133,13 @@ public partial class CartViewModel : ObservableObject
     {
         if (CartItems.Count == 0)
         {
-            ToastService.Instance.ShowError("Cart is empty");
+            ToastService.Instance.ShowError("Giỏ hàng trống");
             return;
         }
 
-        ToastService.Instance.ShowSuccess($"Order placed! Total: ${TotalPrice:F2}");
-        // In a real app, navigate to checkout page
+        // Navigate to checkout page
+        var pageType = typeof(Uno_Platform.Views.CheckoutPage);
+        ServiceLocator.NavigationService.NavigateTo(pageType);
     }
 
     [RelayCommand]

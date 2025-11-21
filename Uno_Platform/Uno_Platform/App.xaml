@@ -20,6 +20,7 @@
       <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter" />
       <converters:PriceFormatConverter x:Key="PriceFormatConverter" />
       <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+      <converters:StringToBooleanConverter x:Key="StringToBooleanConverter" />
 
     </ResourceDictionary>
   </Application.Resources>

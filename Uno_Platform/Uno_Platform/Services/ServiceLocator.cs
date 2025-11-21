@@ -13,6 +13,7 @@ public static class ServiceLocator
     private static CartService? _cartService;
     private static NavigationService? _navigationService;
     private static DataSeedService? _dataSeedService;
+    private static ApiService? _apiService;
 
 #if !__WASM__
     private static AppDbContext? _dbContext;
@@ -58,7 +59,7 @@ public static class ServiceLocator
         }
     }
 
-    public static CartService CartService
+    public static ICartService CartService
     {
         get
         {
@@ -86,4 +87,13 @@ public static class ServiceLocator
     }
 
     public static ToastService ToastService => ToastService.Instance;
+
+    public static ApiService ApiService
+    {
+        get
+        {
+            _apiService ??= new ApiService();
+            return _apiService;
+        }
+    }
 }
