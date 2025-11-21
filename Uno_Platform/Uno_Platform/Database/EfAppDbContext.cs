@@ -21,19 +21,32 @@ public class EfAppDbContext : DbContext
 
     private string GetDatabasePath()
     {
+        string dbPath;
 #if __ANDROID__
         // For Android, use local app data
         string personalFolder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-        return Path.Combine(personalFolder, "cart.db");
+        dbPath = Path.Combine(personalFolder, "cart.db");
 #elif __IOS__
         // For iOS, use documents folder
         string documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-        return Path.Combine(documentsPath, "..", "Library", "cart.db");
+        string libraryPath = Path.Combine(documentsPath, "..", "Library");
+        dbPath = Path.Combine(libraryPath, "cart.db");
 #else
         // For other platforms (Windows, etc.)
         string localFolder = ApplicationData.Current.LocalFolder.Path;
-        return Path.Combine(localFolder, "cart.db");
+        dbPath = Path.Combine(localFolder, "cart.db");
 #endif
+
+        // Ensure the directory exists
+        string? directory = Path.GetDirectoryName(dbPath);
+        if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+            System.Diagnostics.Debug.WriteLine($"Created database directory: {directory}");
+        }
+
+        System.Diagnostics.Debug.WriteLine($"Database path: {dbPath}");
+        return dbPath;
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

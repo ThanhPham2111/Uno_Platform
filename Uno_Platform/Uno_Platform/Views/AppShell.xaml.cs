@@ -11,21 +11,39 @@ public sealed partial class AppShell : Page
     public AppShell()
     {
         this.InitializeComponent();
+        this.Loaded += AppShell_Loaded;
         InitializeNavigation();
+    }
+
+    private void AppShell_Loaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        // Initialize Cart service after page is loaded (database is ready)
+        _ = InitializeCartServiceAsync();
+    }
+
+    private async Task InitializeCartServiceAsync()
+    {
+        try
+        {
+            // Subscribe to Cart events
+            var cartService = ServiceLocator.CartService;
+            cartService.CartCountChanged += (s, count) =>
+            {
+                DispatcherQueue.TryEnqueue(() => UpdateCartBadge(count));
+            };
+
+            // Initialize badge
+            var count = await cartService.GetCartItemCountAsync();
+            DispatcherQueue.TryEnqueue(() => UpdateCartBadge(count));
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error initializing cart service: {ex.Message}");
+        }
     }
 
     private void InitializeNavigation()
     {
-        // Subscribe to Cart events
-        var cartService = ServiceLocator.CartService;
-        cartService.CartCountChanged += (s, count) =>
-        {
-            DispatcherQueue.TryEnqueue(() => UpdateCartBadge(count));
-        };
-
-        // Initialize badge
-        _ = InitializeCartBadgeAsync();
-
         // Listen to frame navigation to update header/tabbar visibility
         ContentFrame.Navigated += (s, e) => 
         {
@@ -51,12 +69,6 @@ public sealed partial class AppShell : Page
         // Navigate to Login page
         ContentFrame.Navigate(typeof(LoginPage));
         PlayPageTransition();
-    }
-
-    private async Task InitializeCartBadgeAsync()
-    {
-        var count = await ServiceLocator.CartService.GetCartItemCountAsync();
-        DispatcherQueue.TryEnqueue(() => UpdateCartBadge(count));
     }
 
     private void NavigateToHome()

@@ -10,17 +10,43 @@ public class CartRepository : ICartRepository
 {
 #if !__WASM__
     private readonly EfAppDbContext _dbContext;
+    private bool _isInitialized = false;
+    private readonly SemaphoreSlim _initLock = new SemaphoreSlim(1, 1);
 
     public CartRepository()
     {
         _dbContext = new EfAppDbContext();
-        // Đảm bảo database được tạo
-        _dbContext.Database.EnsureCreated();
         System.Diagnostics.Debug.WriteLine("=== CartRepository: Using EF Core SQLite ===");
+    }
+
+    private async Task EnsureDatabaseInitializedAsync()
+    {
+        if (_isInitialized) return;
+
+        await _initLock.WaitAsync();
+        try
+        {
+            if (!_isInitialized)
+            {
+                await _dbContext.Database.EnsureCreatedAsync();
+                _isInitialized = true;
+                System.Diagnostics.Debug.WriteLine("=== Database initialized successfully ===");
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error initializing database: {ex.Message}");
+            throw;
+        }
+        finally
+        {
+            _initLock.Release();
+        }
     }
 
     public async Task<List<CartItem>> GetAllCartItemsAsync()
     {
+        await EnsureDatabaseInitializedAsync();
         try
         {
             return await _dbContext.CartItems.ToListAsync();
@@ -34,6 +60,7 @@ public class CartRepository : ICartRepository
 
     public async Task<CartItem?> GetCartItemByProductIdAsync(int productId)
     {
+        await EnsureDatabaseInitializedAsync();
         try
         {
             return await _dbContext.CartItems
@@ -48,6 +75,7 @@ public class CartRepository : ICartRepository
 
     public async Task<bool> AddCartItemAsync(CartItem item)
     {
+        await EnsureDatabaseInitializedAsync();
         try
         {
             item.ProductImage = "Assets/img/caby.png"; // Always use default image
@@ -64,6 +92,7 @@ public class CartRepository : ICartRepository
 
     public async Task<bool> UpdateCartItemAsync(CartItem item)
     {
+        await EnsureDatabaseInitializedAsync();
         try
         {
             item.ProductImage = "Assets/img/caby.png"; // Always use default image
@@ -80,6 +109,7 @@ public class CartRepository : ICartRepository
 
     public async Task<bool> DeleteCartItemAsync(int id)
     {
+        await EnsureDatabaseInitializedAsync();
         try
         {
             var item = await _dbContext.CartItems.FindAsync(id);
@@ -100,6 +130,7 @@ public class CartRepository : ICartRepository
 
     public async Task<bool> ClearCartAsync()
     {
+        await EnsureDatabaseInitializedAsync();
         try
         {
             var allItems = await _dbContext.CartItems.ToListAsync();
@@ -116,6 +147,7 @@ public class CartRepository : ICartRepository
 
     public async Task<int> GetCartItemCountAsync()
     {
+        await EnsureDatabaseInitializedAsync();
         try
         {
             var items = await _dbContext.CartItems.ToListAsync();
