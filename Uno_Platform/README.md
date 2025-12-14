@@ -275,3 +275,20 @@ See `/docs/ReleaseBuild.md` for detailed instructions on:
 - [CommunityToolkit.Mvvm](https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/)
 - [SQLite with .NET](https://www.sqlite.org/index.html)
 
+
+
+
+
+run :
+dotnet run --framework net9.0-android
+
+dotnet build Uno_Platform.csproj \
+  -f net9.0-android \
+  -t:Install \
+  -p:AndroidDeviceId=92822d6e
+
+
+dotnet build -f net9.0-android -t:Install -p:AndroidDeviceId=92822d6e
+
+dotnet run --framework net9.0-android
+
